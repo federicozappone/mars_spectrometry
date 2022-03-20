@@ -10,7 +10,7 @@ from preprocessing import drop_frac_and_He, remove_background_abundance, scale_a
 from tqdm import tqdm
 
 
-def process_prediction(pred):
+def postprocess_prediction(pred):
     if pred >= 0.9:
         return 1.0
     elif pred <= 0.05:
@@ -34,7 +34,7 @@ def predict_for_sample(dataset_path, all_test_files, compounds_order, sample_id,
 
     for compound in compounds_order:
         pred = torch.sigmoid(models[compound](torch.FloatTensor(temp_sample.values).to(device))).cpu().squeeze().tolist()
-        temp_sample_preds_dict[compound] = process_prediction(pred)
+        temp_sample_preds_dict[compound] = postprocess_prediction(pred)
 
     return temp_sample_preds_dict
 
@@ -82,7 +82,7 @@ def generate_submission():
     )
 
     print(final_submission_df.head())
-    final_submission_df.to_csv("submission/submission_mono_processed.csv")
+    final_submission_df.to_csv("submission/submission_mono_postprocessed.csv")
 
 
 if __name__ == "__main__":
