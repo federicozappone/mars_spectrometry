@@ -20,6 +20,7 @@ class Mars_Spectrometry_Model(nn.Module):
             nn.ReLU(),
             nn.Linear(128, 64),
             nn.ReLU(),
+            nn.Dropout(p=0.3),
             nn.Linear(64, num_classes)
         )
 

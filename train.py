@@ -104,14 +104,16 @@ def train():
 
     # initialize custom happywhale dataset and transformations
     dataset_train = Mars_Spectrometry_Dataset("dataset/train_features.pickle", "dataset/train_labels.pickle")
-    dataset_val = Mars_Spectrometry_Dataset("dataset/train_features.pickle", "dataset/train_labels.pickle")
+    dataset_val = Mars_Spectrometry_Dataset("dataset/val_features.pickle", "dataset/val_labels.pickle")
 
+    """
     # number of validation samples (30% of training samples)
     num_val_samples = int(len(dataset_train) * 0.3)
 
     indices = torch.randperm(len(dataset_train)).tolist()
     dataset_train = torch.utils.data.Subset(dataset_train, indices[:-num_val_samples])
     dataset_val = torch.utils.data.Subset(dataset_val, indices[-num_val_samples:])
+    """
 
     # define training and validation data loaders
     data_loader_train = torch.utils.data.DataLoader(
@@ -145,7 +147,7 @@ def train():
     # Process is complete.
     print("Training process has finished.")
 
-    torch.save(model.state_dict(), f"checkpoints/model_BCEWithLogitsloss_{best_acc}.ckpt")
+    torch.save(model.state_dict(), f"checkpoints/model_BCEWithLogitsloss.ckpt")
 
 
 if __name__ == "__main__":

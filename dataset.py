@@ -15,9 +15,6 @@ class Mars_Spectrometry_Dataset(Dataset):
         self.train_features = pickle.load(train_features_file)
         self.train_labels = pickle.load(train_labels_file)
 
-        print(self.train_features)
-        print(self.train_labels)
-
         self.X_data = torch.FloatTensor(self.train_features.values)
         self.y_data = torch.FloatTensor(self.train_labels.values)
         

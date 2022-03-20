@@ -116,14 +116,16 @@ def train():
 
         # initialize custom happywhale dataset and transformations
         dataset_train = Mars_Spectrometry_Dataset_Mono("dataset/train_features.pickle", "dataset/train_labels.pickle", compound_index)
-        dataset_val = Mars_Spectrometry_Dataset_Mono("dataset/train_features.pickle", "dataset/train_labels.pickle", compound_index)
+        dataset_val = Mars_Spectrometry_Dataset_Mono("dataset/val_features.pickle", "dataset/val_labels.pickle", compound_index)
 
+        """
         # number of validation samples (30% of training samples)
         num_val_samples = int(len(dataset_train) * 0.3)
 
         indices = torch.randperm(len(dataset_train)).tolist()
         dataset_train = torch.utils.data.Subset(dataset_train, indices[:-num_val_samples])
         dataset_val = torch.utils.data.Subset(dataset_val, indices[-num_val_samples:])
+        """
 
         # define training and validation data loaders
         data_loader_train = torch.utils.data.DataLoader(
