@@ -14,9 +14,13 @@ from albumentations.pytorch import ToTensorV2
 
 class Mars_Spectrometry_Image_Dataset(Dataset):
     
-    def __init__(self, features_path, labels_path, image_size=100, seed=42):
+    def __init__(self, features_path, labels_path, image_size=128, seed=42):
         self.features = pickle.load(open(features_path, "rb"))
         self.labels = pickle.load(open(labels_path, "rb"))
+
+        self.num_features = self.features.shape[1]
+        self.num_labels = self.labels.shape[1]
+        self.image_size = image_size
 
         self.labels = torch.Tensor(self.labels.values)
 

@@ -119,7 +119,7 @@ class FineTuneScheduler:
 
         # Freeze all weights
         for name, param in model_new.named_parameters():
-            layer_index = name.split('.')[0][-1]
+            layer_index = name.split(".")[0][-1]
 
             if layer_index == 5:
                 continue
@@ -148,7 +148,7 @@ class FineTuneScheduler:
             
             # Unfreeze parameters of the last frozen layer
             for name, param in model.named_parameters():
-                layer_index = name.split('.')[0][-1]
+                layer_index = name.split(".")[0][-1]
 
                 if layer_index == last_frozen_index:
                     param.requires_grad = True
@@ -157,7 +157,6 @@ class FineTuneScheduler:
 
 
 class Mars_Spectrometry_Model(nn.Module):
-
     def __init__(self, num_features, num_classes):
         super(Mars_Spectrometry_Model, self).__init__()
 
@@ -186,7 +185,6 @@ class Mars_Spectrometry_Model(nn.Module):
 
 
 class Soft_Ordering_1D_CNN(nn.Module):
-
     def __init__(self, input_dim, output_dim, sign_size=32, cha_input=16, cha_hidden=32, 
                  K=2, dropout_input=0.2, dropout_hidden=0.2, dropout_output=0.2):
         super(Soft_Ordering_1D_CNN, self).__init__()

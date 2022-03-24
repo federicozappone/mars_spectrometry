@@ -4,7 +4,7 @@ import torch.nn.functional as F
 
 
 class Simple_CNN(nn.Module):
-    def __init__(self, image_size):
+    def __init__(self, num_labels):
         super(Simple_CNN, self).__init__()
 
         self.pool = nn.MaxPool2d(2, 2)
@@ -14,7 +14,14 @@ class Simple_CNN(nn.Module):
         
         self.fc1 = nn.Linear(13456, 120)
         self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
+        self.fc3 = nn.Linear(84, num_labels)
+
+        self.apply(self.init_weights_xavier)
+
+    def init_weights_xavier(self, m):
+        if isinstance(m, nn.Linear):
+            torch.nn.init.xavier_uniform_(m.weight)
+            m.bias.data.fill_(0.01)
 
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
@@ -23,5 +30,6 @@ class Simple_CNN(nn.Module):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
+
 
         return x

@@ -125,7 +125,7 @@ def train():
     for compound_index, compound in enumerate(compounds):
         print(f"Training for compound {compound}")
 
-        # initialize custom happywhale dataset and transformations
+        # initialize custom dataset and transformations
         dataset_train = Mars_Spectrometry_Dataset_Mono("dataset/train_features.pickle", "dataset/train_labels.pickle", compound_index)
         dataset_val = Mars_Spectrometry_Dataset_Mono("dataset/val_features.pickle", "dataset/val_labels.pickle", compound_index)
 

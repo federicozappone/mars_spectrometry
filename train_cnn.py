@@ -12,13 +12,13 @@ import random
 from torch.optim import lr_scheduler
 from torch.utils.data import DataLoader, ConcatDataset
 
-from model import Mars_Spectrometry_Model, Soft_Ordering_1D_CNN, DNN
-from dataset import Mars_Spectrometry_Dataset
+from cnn_model import Simple_CNN
+from image_dataset import Mars_Spectrometry_Image_Dataset
 
 from sklearn.model_selection import KFold
 
 
-def seed_everything(seed=42):
+def seed_everything(seed):
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
@@ -114,8 +114,8 @@ def train():
     seeds = [0, 1, 2, 3, 4, 5, 6]
 
     # initialize custom dataset and transformations
-    dataset_train = Mars_Spectrometry_Dataset("dataset/train_features.pickle", "dataset/train_labels.pickle")
-    dataset_val = Mars_Spectrometry_Dataset("dataset/val_features.pickle", "dataset/val_labels.pickle")
+    dataset_train = Mars_Spectrometry_Image_Dataset("dataset/train_features.pickle", "dataset/train_labels.pickle", image_size=128)
+    dataset_val = Mars_Spectrometry_Image_Dataset("dataset/val_features.pickle", "dataset/val_labels.pickle", image_size=128)
     dataset = ConcatDataset([dataset_train, dataset_val])
 
     num_features = dataset_train.num_features
@@ -165,22 +165,22 @@ def train():
             }
           
             # Initialize the model
-            model = Mars_Spectrometry_Model(num_features, num_labels)
+            model = Simple_CNN(num_labels)
             model.to(device)
               
             # Define the loss function and optimizer
             criterion = nn.BCEWithLogitsLoss()
-            optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-5)
+            optimizer = torch.optim.Adam(model.parameters(), lr=0.002, weight_decay=1e-5)
             scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, "min", patience=4, factor=0.8, min_lr=1e-8)
 
-            model, best_acc = train_model(device, model, criterion, optimizer, scheduler, dataloaders, num_epochs=24)
+            model, best_acc = train_model(device, model, criterion, optimizer, scheduler, dataloaders, num_epochs=25)
 
             print(f"Accuracy for fold {fold}: {best_acc}")
             print("-" * 10)
 
             results[fold] = best_acc
 
-            torch.save(model.state_dict(), f"checkpoints/model_BCEWithLogitsloss_{fold}.ckpt")
+            torch.save(model.state_dict(), f"checkpoints/model_CNN_{fold}.ckpt")
 
         # Print fold results
         print(f"K-Fold Cross Validation results for {kfold_n} folds")
