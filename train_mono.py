@@ -21,6 +21,17 @@ def seed_torch(seed):
     torch.backends.cudnn.deterministic = True
 
 
+def warmup_lr_scheduler(optimizer, warmup_iters, warmup_factor):
+
+    def f(x):
+        if x >= warmup_iters:
+            return 1
+        alpha = float(x) / warmup_iters
+        return warmup_factor * (1 - alpha) + alpha
+
+    return torch.optim.lr_scheduler.LambdaLR(optimizer, f)
+
+
 def train_model(device, model, criterion, optimizer, scheduler, dataloaders, num_epochs=25):
     since = time.time()
 
@@ -79,8 +90,8 @@ def train_model(device, model, criterion, optimizer, scheduler, dataloaders, num
             print("{} Loss: {:.4f} Acc: {:.4f}".format(
                 phase, epoch_loss, epoch_acc))
 
-            if phase == "train":
-                scheduler.step(epoch_loss)
+            if phase == "train" and scheduler is not None:
+                scheduler.step()
 
             # deep copy the model
             if phase == "val" and epoch_acc > best_acc:
@@ -147,12 +158,13 @@ def train():
         # Define the loss function and optimizer
         criterion = nn.BCEWithLogitsLoss(reduction="none")
         optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-5)
-        scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, "min", patience=10, factor=0.8, min_lr=1e-8)
+        #scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, "min", patience=5, factor=0.8, min_lr=1e-8)
+        scheduler = lr_scheduler.ExponentialLR(optimizer, gamma=0.1)
 
         model, best_acc, best_loss = train_model(device, model, criterion, optimizer, scheduler, dataloaders, num_epochs=25)
 
         # Process is complete.
-        print(f"Training process for compound {compound} has finished.")
+        print(f"Training process for compound {compound} has finished")
 
         torch.save(model.state_dict(), f"checkpoints/compounds/model_BCEWithLogitsLoss_{compound}.ckpt")
 

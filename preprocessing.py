@@ -88,14 +88,14 @@ def abun_per_tempbin(df):
 
     # Create a series of temperature bins
     temprange = pd.interval_range(start=-100, end=1500, freq=100)
-    temprange
 
     # Make dataframe with rows that are combinations of all temperature bins
     # and all m/z values
     allcombs = list(itertools.product(temprange, [*range(0, 100)]))
 
     allcombs_df = pd.DataFrame(allcombs, columns=["temp_bin", "m/z"])
-    allcombs_df.head()
+    
+    print(allcombs_df.head())
 
     # Bin temperatures
     df["temp_bin"] = pd.cut(df["temp"], bins=temprange)

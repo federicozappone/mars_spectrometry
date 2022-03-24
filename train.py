@@ -7,17 +7,23 @@ import torch.nn as nn
 import torch.optim as optim
 import pickle
 import pandas as pd
+import random
 
 from torch.optim import lr_scheduler
+from torch.utils.data import DataLoader, ConcatDataset
 
-from model import Mars_Spectrometry_Model
+from model import Mars_Spectrometry_Model, Soft_Ordering_1D_CNN, DNN
 from dataset import Mars_Spectrometry_Dataset
 
+from sklearn.model_selection import KFold
 
-def seed_torch(seed):
+
+def seed_everything(seed=42):
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
 
 
@@ -96,15 +102,24 @@ def train_model(device, model, criterion, optimizer, scheduler, dataloaders, num
     # load best model weights
     model.load_state_dict(best_model_wts)
 
-    return model, "{:4f}".format(best_acc)
+    return model, best_acc
   
   
 def train():
-    seed_torch(42)
+    # select the device
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print("Training on device:", device)
+
+    kfold_n = 7
+    seeds = [0, 1, 2, 3, 4, 5, 6]
 
     # initialize custom happywhale dataset and transformations
     dataset_train = Mars_Spectrometry_Dataset("dataset/train_features.pickle", "dataset/train_labels.pickle")
     dataset_val = Mars_Spectrometry_Dataset("dataset/val_features.pickle", "dataset/val_labels.pickle")
+    dataset = ConcatDataset([dataset_train, dataset_val])
+
+    num_features = dataset_train.num_features
+    num_labels = dataset_train.num_labels
 
     """
     # number of validation samples (30% of training samples)
@@ -115,39 +130,73 @@ def train():
     dataset_val = torch.utils.data.Subset(dataset_val, indices[-num_val_samples:])
     """
 
-    # define training and validation data loaders
-    data_loader_train = torch.utils.data.DataLoader(
-        dataset_train, batch_size=1, shuffle=True, num_workers=1)
+    total_acc = 0
 
-    data_loader_val = torch.utils.data.DataLoader(
-        dataset_val, batch_size=1, shuffle=False, num_workers=1)
+    for seed in seeds:
+        seed_everything(seed)
 
-    # set up dataloaders dict
-    dataloaders = {
-        "train": data_loader_train,
-        "val": data_loader_val
-    }
+        # For fold results
+        results = {}
 
-    # select the device
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print("Training on device:", device)
+        kfold = KFold(n_splits=7, shuffle=True, random_state=seed)
 
-  
-    # Initialize the model
-    model = Mars_Spectrometry_Model(1600, 10)
-    model.to(device)
-      
-    # Define the loss function and optimizer
-    criterion = nn.BCEWithLogitsLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-5)
-    scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, "min", patience=10, factor=0.8, min_lr=1e-8)
+        # K-fold Cross Validation model evaluation
+        for fold, (train_ids, val_ids) in enumerate(kfold.split(dataset)):
 
-    model, best_acc = train_model(device, model, criterion, optimizer, scheduler, dataloaders, num_epochs=25)
+            # Print
+            print(f"Fold {fold} - seed {seed}")
+            print("-" * 10)
 
-    # Process is complete.
-    print("Training process has finished.")
+            # Sample elements randomly from a given list of ids, no replacement.
+            train_subsampler = torch.utils.data.SubsetRandomSampler(train_ids)
+            val_subsampler = torch.utils.data.SubsetRandomSampler(val_ids)
 
-    torch.save(model.state_dict(), f"checkpoints/model_BCEWithLogitsloss.ckpt")
+            # define training and validation data loaders
+            data_loader_train = torch.utils.data.DataLoader(
+                dataset, batch_size=16, num_workers=1, sampler=train_subsampler)
+
+            data_loader_val = torch.utils.data.DataLoader(
+                dataset, batch_size=1, num_workers=1, sampler=val_subsampler)
+
+            # set up dataloaders dict
+            dataloaders = {
+                "train": data_loader_train,
+                "val": data_loader_val
+            }
+          
+            # Initialize the model
+            model = Mars_Spectrometry_Model(num_features, num_labels)
+            model.to(device)
+              
+            # Define the loss function and optimizer
+            criterion = nn.BCEWithLogitsLoss()
+            optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-5)
+            scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, "min", patience=4, factor=0.8, min_lr=1e-8)
+
+            model, best_acc = train_model(device, model, criterion, optimizer, scheduler, dataloaders, num_epochs=24)
+
+            print(f"Accuracy for fold {fold}: {best_acc}")
+            print("-" * 10)
+
+            results[fold] = best_acc
+
+            torch.save(model.state_dict(), f"checkpoints/model_BCEWithLogitsloss_{fold}.ckpt")
+
+        # Print fold results
+        print(f"K-Fold Cross Validation results for {kfold_n} folds")
+        print("-" * 10)
+
+        avg = 0.0
+
+        for key, value in results.items():
+            print(f"Fold {key} seed {seed}: {value}")
+            avg += value
+
+        print(f"Average: {avg/len(results.items())}")
+
+        total_acc += avg/len(results.items())
+
+    print(f"Accuracy across all folds/seeds: {total_acc/len(seeds)}")
 
 
 if __name__ == "__main__":
