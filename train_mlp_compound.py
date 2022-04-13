@@ -14,10 +14,12 @@ from model import Mars_Spectrometry_Model
 from dataset import Mars_Spectrometry_Dataset_Mono
 
 
-def seed_torch(seed):
+def seed_everything(seed=42):
+    random.seed(seed)
+    os.environ["PYTHONHASHSEED"] = str(seed)
+    np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
-    torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
 
 

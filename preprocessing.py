@@ -94,8 +94,6 @@ def abun_per_tempbin(df):
     allcombs = list(itertools.product(temprange, [*range(0, 100)]))
 
     allcombs_df = pd.DataFrame(allcombs, columns=["temp_bin", "m/z"])
-    
-    print(allcombs_df.head())
 
     # Bin temperatures
     df["temp_bin"] = pd.cut(df["temp"], bins=temprange)

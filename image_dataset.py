@@ -24,13 +24,13 @@ class Mars_Spectrometry_Image_Dataset(Dataset):
 
         self.labels = torch.Tensor(self.labels.values)
 
-        tsne = TSNE(n_components=2, perplexity=2, metric="cosine",
+        self.tsne = TSNE(n_components=2, perplexity=2, metric="cosine",
                     random_state=seed, n_jobs=-1)
 
-        it = ImageTransformer(feature_extractor=tsne, pixels=image_size)
-        it.fit(self.features)
+        self.it = ImageTransformer(feature_extractor=self.tsne, pixels=image_size)
+        self.it.fit(self.features)
 
-        self.images = it.transform(self.features)
+        self.images = self.it.transform(self.features)
         self.transforms = A.Compose([ToTensorV2()])
         
     def __getitem__(self, index):

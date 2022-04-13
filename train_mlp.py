@@ -14,17 +14,78 @@ from torch.utils.data import DataLoader, ConcatDataset
 
 from model import Mars_Spectrometry_Model, Soft_Ordering_1D_CNN, DNN
 from dataset import Mars_Spectrometry_Dataset
+from preprocessing import drop_frac_and_He, remove_background_abundance, \
+    scale_abun, preprocess_sample, abun_per_tempbin
+from tqdm import tqdm
 
 from sklearn.model_selection import KFold
 
 
 def seed_everything(seed=42):
     random.seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)
+    os.environ["PYTHONHASHSEED"] = str(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     torch.backends.cudnn.deterministic = True
+
+
+def predict_for_sample(dataset_path, all_test_files, compounds_order, sample_id, model, device):
+    # Import sample
+    temp_sample = pd.read_csv(dataset_path + "/" + all_test_files[sample_id])
+
+    # Preprocess sample
+    temp_sample = preprocess_sample(temp_sample)
+
+    # Feature engineering on sample
+    temp_sample = abun_per_tempbin(temp_sample)
+
+    # Generate predictions for each class
+    temp_sample_preds_dict = {}
+
+    preds = torch.sigmoid(model(torch.FloatTensor(temp_sample.values).to(device))).cpu().squeeze().tolist()
+
+    for i, compound in enumerate(compounds_order):
+        temp_sample_preds_dict[compound] = preds[i]
+
+    return temp_sample_preds_dict
+
+
+def generate_submission(model, device, prefix, seed, fold):
+    model.eval()
+
+    pd.set_option("max_colwidth", 80)
+
+    dataset_path = "dataset"
+    metadata = pd.read_csv(dataset_path + "/metadata.csv", index_col="sample_id")
+
+    val_files = metadata[metadata["split"] == "val"]["features_path"].to_dict()
+    test_files = metadata[metadata["split"] == "test"]["features_path"].to_dict()
+
+    # Create dict with both validation and test sample IDs and paths
+    all_test_files = val_files.copy()
+    all_test_files.update(test_files)
+    print("Total test files: ", len(all_test_files))
+
+    # Import submission format
+    submission_template_df = pd.read_csv(
+        dataset_path + "/" + "submission_format.csv", index_col="sample_id"
+    )
+
+    compounds_order = submission_template_df.columns
+    sample_order = submission_template_df.index
+
+    # Dataframe to store submissions in
+    final_submission_df = pd.DataFrame(
+        [
+            predict_for_sample(dataset_path, all_test_files, compounds_order, sample_id, model, device)
+            for sample_id in tqdm(sample_order)
+        ],
+        index=sample_order,
+    )
+
+    print(final_submission_df.head())
+    final_submission_df.to_csv(f"submission/{prefix}_{seed}_{fold}_submission.csv")
 
 
 def train_model(device, model, criterion, optimizer, scheduler, dataloaders, num_epochs=25):
@@ -180,7 +241,8 @@ def train():
 
             results[fold] = best_acc
 
-            torch.save(model.state_dict(), f"checkpoints/model_BCEWithLogitsloss_{fold}.ckpt")
+            #torch.save(model.state_dict(), f"checkpoints/model_BCEWithLogitsloss_fold{fold}_seed{seed}.ckpt")
+            generate_submission(model, device, f"mlp_acc_{best_acc}", seed, fold)
 
         # Print fold results
         print(f"K-Fold Cross Validation results for {kfold_n} folds")
