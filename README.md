@@ -10,5 +10,5 @@ Two simple models included:
 
 ## Results
 
-Achieved an AggLogLoss of **0.2170** on the first phase of the challenge with position 34/578 on the leaderboard.\
-Achieved an AggLogLoss of **0.0581** on the second phase of the challenge with position 24/677 on the leaderboard.
+Achieved an AggLogLoss of **0.2170** during the first phase of the challenge with position 34/578 on the leaderboard.\
+Achieved an AggLogLoss of **0.0581** during the second phase of the challenge with position 24/677 on the leaderboard.
