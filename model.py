@@ -39,7 +39,7 @@ class SmoothBCEwLogits(_WeightedLoss):
 
 
 class DNN(nn.Module):
-    def __init__(self, num_features, num_targets):
+    def __init__(self, num_features, num_classes):
         super(DNN, self).__init__()
         self.hidden_size = [1500, 1250, 1000, 750]
         self.dropout_value = [0.5, 0.35, 0.3, 0.25]
@@ -61,7 +61,14 @@ class DNN(nn.Module):
 
         self.batch_norm5 = nn.BatchNorm1d(self.hidden_size[3])
         self.dropout5 = nn.Dropout(self.dropout_value[3])
-        self.dense5 = nn.utils.weight_norm(nn.Linear(self.hidden_size[3], num_targets))
+        self.dense5 = nn.utils.weight_norm(nn.Linear(self.hidden_size[3], num_classes))
+
+        self.apply(self.init_weights_xavier)
+
+    def init_weights_xavier(self, m):
+        if isinstance(m, nn.Linear):
+            torch.nn.init.xavier_uniform_(m.weight)
+            m.bias.data.fill_(0.01)
     
     def forward(self, x):
         x = self.batch_norm1(x)
