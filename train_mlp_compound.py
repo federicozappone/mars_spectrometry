@@ -23,17 +23,6 @@ def seed_everything(seed=42):
     torch.backends.cudnn.deterministic = True
 
 
-def warmup_lr_scheduler(optimizer, warmup_iters, warmup_factor):
-
-    def f(x):
-        if x >= warmup_iters:
-            return 1
-        alpha = float(x) / warmup_iters
-        return warmup_factor * (1 - alpha) + alpha
-
-    return torch.optim.lr_scheduler.LambdaLR(optimizer, f)
-
-
 def train_model(device, model, criterion, optimizer, scheduler, dataloaders, num_epochs=25):
     since = time.time()
 
@@ -131,6 +120,11 @@ def train():
         dataset_train = Mars_Spectrometry_Dataset_Mono("dataset/train_features.pickle", "dataset/train_labels.pickle", compound_index)
         dataset_val = Mars_Spectrometry_Dataset_Mono("dataset/val_features.pickle", "dataset/val_labels.pickle", compound_index)
 
+        num_features = dataset_train.num_features
+        num_labels = dataset_train.num_labels
+
+
+        # code from phase 1 of the challenge where we didn't have validation labels
         """
         # number of validation samples (30% of training samples)
         num_val_samples = int(len(dataset_train) * 0.3)
@@ -154,7 +148,7 @@ def train():
         }
       
         # Initialize the model
-        model = Mars_Spectrometry_Model(1600, 1)
+        model = Mars_Spectrometry_Model(num_features, 1)
         model.to(device)
           
         # Define the loss function and optimizer

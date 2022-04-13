@@ -52,14 +52,17 @@ class Mars_Spectrometry_Dataset_Mono(Dataset):
         self.compounds = "basalt", "carbonate", "chloride", "iron_oxide", "oxalate", "oxychlorine", "phyllosilicate", "silicate", "sulfate", "sulfide"
         self.selected = self.compounds[compound_index]
 
-        train_features_file = open(train_features_path, "rb")
-        train_labels_file = open(train_labels_path, "rb")
+        features_file = open(features_path, "rb")
+        labels_file = open(labels_path, "rb")
 
-        self.train_features = pickle.load(train_features_file)
-        self.train_labels = pickle.load(train_labels_file)[self.selected]
+        self.features = pickle.load(features_file)
+        self.labels = pickle.load(labels_file)[self.selected]
 
-        self.X_data = torch.FloatTensor(self.train_features.values)
-        self.y_data = torch.FloatTensor(self.train_labels.values)
+        self.X_data = torch.FloatTensor(self.features.values)
+        self.y_data = torch.FloatTensor(self.labels.values)
+
+        self.num_features = self.features.shape[1]
+        self.num_labels = self.labels.shape[1]
         
     def __getitem__(self, index):
         return self.X_data[index], self.y_data[index]

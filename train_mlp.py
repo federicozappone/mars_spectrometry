@@ -12,16 +12,15 @@ import random
 from torch.optim import lr_scheduler
 from torch.utils.data import DataLoader, ConcatDataset
 
-from model import Mars_Spectrometry_Model, Soft_Ordering_1D_CNN, DNN
+from model import Mars_Spectrometry_Model
 from dataset import Mars_Spectrometry_Dataset
-from preprocessing import drop_frac_and_He, remove_background_abundance, \
-    scale_abun, preprocess_sample, abun_per_tempbin
+from preprocessing import preprocess_sample, abun_per_tempbin
 from tqdm import tqdm
 
 from sklearn.model_selection import KFold
 
 
-def seed_everything(seed=42):
+def seed_everything(seed):
     random.seed(seed)
     os.environ["PYTHONHASHSEED"] = str(seed)
     np.random.seed(seed)
@@ -182,6 +181,7 @@ def train():
     num_features = dataset_train.num_features
     num_labels = dataset_train.num_labels
 
+    # code from phase 1 of the challenge where we didn't have validation labels
     """
     # number of validation samples (30% of training samples)
     num_val_samples = int(len(dataset_train) * 0.3)
@@ -242,6 +242,8 @@ def train():
             results[fold] = best_acc
 
             #torch.save(model.state_dict(), f"checkpoints/model_BCEWithLogitsloss_fold{fold}_seed{seed}.ckpt")
+
+            # directly generate the submission for seed/fold combination here and merge them later
             generate_submission(model, device, f"mlp_acc_{best_acc}", seed, fold)
 
         # Print fold results

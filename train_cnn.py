@@ -15,8 +15,7 @@ from torch.utils.data import DataLoader, ConcatDataset
 
 from cnn_model import Simple_CNN
 from image_dataset import Mars_Spectrometry_Image_Dataset
-from preprocessing import drop_frac_and_He, remove_background_abundance, \
-    scale_abun, preprocess_sample, abun_per_tempbin
+from preprocessing import preprocess_sample, abun_per_tempbin
 from tqdm import tqdm
 
 from sklearn.model_selection import KFold
@@ -189,6 +188,7 @@ def train():
     num_features = dataset_train.num_features
     num_labels = dataset_train.num_labels
 
+    # code from phase 1 of the challenge where we didn't have validation labels
     """
     # number of validation samples (30% of training samples)
     num_val_samples = int(len(dataset_train) * 0.3)
@@ -249,6 +249,8 @@ def train():
             results[fold] = best_acc
 
             #torch.save(model.state_dict(), f"checkpoints/model_CNN_fold{fold}_seed{seed}.ckpt")
+
+            # directly generate the submission for seed/fold combination here and merge them later
             generate_submission(model, device, dataset_train.it, "cnn", seed, fold)
 
         # Print fold results

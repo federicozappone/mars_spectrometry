@@ -1,0 +1,57 @@
+2022-04-13 15:49:13,602 - io.py[line:35] - INFO: Saving the model to `./VotingClassifier_Mars_Spectrometry_Model_10_ckpt.pth`
+2022-04-13 15:49:14,482 - voting.py[line:240] - INFO: Epoch: 000 | Validation Acc: 8.191 % | Historical Best: 8.191 %
+2022-04-13 15:49:19,213 - io.py[line:35] - INFO: Saving the model to `./VotingClassifier_Mars_Spectrometry_Model_10_ckpt.pth`
+2022-04-13 15:49:22,306 - voting.py[line:240] - INFO: Epoch: 001 | Validation Acc: 9.556 % | Historical Best: 9.556 %
+2022-04-13 15:49:27,098 - voting.py[line:240] - INFO: Epoch: 002 | Validation Acc: 7.850 % | Historical Best: 9.556 %
+2022-04-13 15:49:31,855 - voting.py[line:240] - INFO: Epoch: 003 | Validation Acc: 7.850 % | Historical Best: 9.556 %
+2022-04-13 15:49:36,571 - io.py[line:35] - INFO: Saving the model to `./VotingClassifier_Mars_Spectrometry_Model_10_ckpt.pth`
+2022-04-13 15:49:37,458 - voting.py[line:240] - INFO: Epoch: 004 | Validation Acc: 32.082 % | Historical Best: 32.082 %
+2022-04-13 15:49:42,214 - io.py[line:35] - INFO: Saving the model to `./VotingClassifier_Mars_Spectrometry_Model_10_ckpt.pth`
+2022-04-13 15:49:43,112 - voting.py[line:240] - INFO: Epoch: 005 | Validation Acc: 47.099 % | Historical Best: 47.099 %
+2022-04-13 15:49:47,863 - io.py[line:35] - INFO: Saving the model to `./VotingClassifier_Mars_Spectrometry_Model_10_ckpt.pth`
+2022-04-13 15:49:48,742 - voting.py[line:240] - INFO: Epoch: 006 | Validation Acc: 56.655 % | Historical Best: 56.655 %
+2022-04-13 15:49:53,473 - io.py[line:35] - INFO: Saving the model to `./VotingClassifier_Mars_Spectrometry_Model_10_ckpt.pth`
+2022-04-13 15:49:54,339 - voting.py[line:240] - INFO: Epoch: 007 | Validation Acc: 89.761 % | Historical Best: 89.761 %
+2022-04-13 15:49:59,090 - voting.py[line:240] - INFO: Epoch: 008 | Validation Acc: 46.416 % | Historical Best: 89.761 %
+2022-04-13 15:50:03,746 - voting.py[line:240] - INFO: Epoch: 009 | Validation Acc: 76.792 % | Historical Best: 89.761 %
+2022-04-13 15:50:08,476 - voting.py[line:240] - INFO: Epoch: 010 | Validation Acc: 76.109 % | Historical Best: 89.761 %
+2022-04-13 15:50:13,201 - voting.py[line:240] - INFO: Epoch: 011 | Validation Acc: 72.014 % | Historical Best: 89.761 %
+2022-04-13 15:50:17,908 - voting.py[line:240] - INFO: Epoch: 012 | Validation Acc: 86.007 % | Historical Best: 89.761 %
+2022-04-13 15:50:22,601 - voting.py[line:240] - INFO: Epoch: 013 | Validation Acc: 82.253 % | Historical Best: 89.761 %
+2022-04-13 15:50:27,365 - io.py[line:35] - INFO: Saving the model to `./VotingClassifier_Mars_Spectrometry_Model_10_ckpt.pth`
+2022-04-13 15:50:28,233 - voting.py[line:240] - INFO: Epoch: 014 | Validation Acc: 98.635 % | Historical Best: 98.635 %
+2022-04-13 15:50:32,924 - voting.py[line:240] - INFO: Epoch: 015 | Validation Acc: 91.809 % | Historical Best: 98.635 %
+2022-04-13 15:50:37,593 - voting.py[line:240] - INFO: Epoch: 016 | Validation Acc: 62.799 % | Historical Best: 98.635 %
+2022-04-13 15:50:42,358 - voting.py[line:240] - INFO: Epoch: 017 | Validation Acc: 96.587 % | Historical Best: 98.635 %
+2022-04-13 15:50:47,139 - voting.py[line:240] - INFO: Epoch: 018 | Validation Acc: 84.300 % | Historical Best: 98.635 %
+2022-04-13 15:50:51,933 - voting.py[line:240] - INFO: Epoch: 019 | Validation Acc: 96.587 % | Historical Best: 98.635 %
+2022-04-13 15:50:56,674 - voting.py[line:240] - INFO: Epoch: 020 | Validation Acc: 85.666 % | Historical Best: 98.635 %
+2022-04-13 15:51:01,420 - voting.py[line:240] - INFO: Epoch: 021 | Validation Acc: 69.283 % | Historical Best: 98.635 %
+2022-04-13 15:51:06,185 - voting.py[line:240] - INFO: Epoch: 022 | Validation Acc: 82.594 % | Historical Best: 98.635 %
+2022-04-13 15:51:10,955 - voting.py[line:240] - INFO: Epoch: 023 | Validation Acc: 79.863 % | Historical Best: 98.635 %
+2022-04-13 15:51:15,773 - voting.py[line:240] - INFO: Epoch: 024 | Validation Acc: 76.109 % | Historical Best: 98.635 %
+2022-04-13 15:51:20,561 - voting.py[line:240] - INFO: Epoch: 025 | Validation Acc: 86.007 % | Historical Best: 98.635 %
+2022-04-13 15:51:25,302 - voting.py[line:240] - INFO: Epoch: 026 | Validation Acc: 65.188 % | Historical Best: 98.635 %
+2022-04-13 15:51:30,047 - voting.py[line:240] - INFO: Epoch: 027 | Validation Acc: 78.157 % | Historical Best: 98.635 %
+2022-04-13 15:51:34,823 - voting.py[line:240] - INFO: Epoch: 028 | Validation Acc: 67.235 % | Historical Best: 98.635 %
+2022-04-13 15:51:39,554 - voting.py[line:240] - INFO: Epoch: 029 | Validation Acc: 67.577 % | Historical Best: 98.635 %
+2022-04-13 15:51:44,296 - voting.py[line:240] - INFO: Epoch: 030 | Validation Acc: 83.276 % | Historical Best: 98.635 %
+2022-04-13 15:51:49,050 - voting.py[line:240] - INFO: Epoch: 031 | Validation Acc: 71.331 % | Historical Best: 98.635 %
+2022-04-13 15:51:53,802 - voting.py[line:240] - INFO: Epoch: 032 | Validation Acc: 69.966 % | Historical Best: 98.635 %
+2022-04-13 15:51:58,439 - voting.py[line:240] - INFO: Epoch: 033 | Validation Acc: 91.468 % | Historical Best: 98.635 %
+2022-04-13 15:52:03,200 - voting.py[line:240] - INFO: Epoch: 034 | Validation Acc: 62.457 % | Historical Best: 98.635 %
+2022-04-13 15:52:07,944 - voting.py[line:240] - INFO: Epoch: 035 | Validation Acc: 61.433 % | Historical Best: 98.635 %
+2022-04-13 15:52:12,719 - voting.py[line:240] - INFO: Epoch: 036 | Validation Acc: 55.290 % | Historical Best: 98.635 %
+2022-04-13 15:52:17,453 - voting.py[line:240] - INFO: Epoch: 037 | Validation Acc: 64.164 % | Historical Best: 98.635 %
+2022-04-13 15:52:22,235 - voting.py[line:240] - INFO: Epoch: 038 | Validation Acc: 66.553 % | Historical Best: 98.635 %
+2022-04-13 15:52:26,965 - voting.py[line:240] - INFO: Epoch: 039 | Validation Acc: 66.894 % | Historical Best: 98.635 %
+2022-04-13 15:52:31,701 - voting.py[line:240] - INFO: Epoch: 040 | Validation Acc: 51.536 % | Historical Best: 98.635 %
+2022-04-13 15:52:36,452 - voting.py[line:240] - INFO: Epoch: 041 | Validation Acc: 51.195 % | Historical Best: 98.635 %
+2022-04-13 15:52:41,193 - voting.py[line:240] - INFO: Epoch: 042 | Validation Acc: 74.744 % | Historical Best: 98.635 %
+2022-04-13 15:52:45,946 - voting.py[line:240] - INFO: Epoch: 043 | Validation Acc: 59.727 % | Historical Best: 98.635 %
+2022-04-13 15:52:50,702 - voting.py[line:240] - INFO: Epoch: 044 | Validation Acc: 79.863 % | Historical Best: 98.635 %
+2022-04-13 15:52:55,477 - voting.py[line:240] - INFO: Epoch: 045 | Validation Acc: 81.911 % | Historical Best: 98.635 %
+2022-04-13 15:53:00,238 - voting.py[line:240] - INFO: Epoch: 046 | Validation Acc: 86.689 % | Historical Best: 98.635 %
+2022-04-13 15:53:05,103 - voting.py[line:240] - INFO: Epoch: 047 | Validation Acc: 79.181 % | Historical Best: 98.635 %
+2022-04-13 15:53:09,908 - voting.py[line:240] - INFO: Epoch: 048 | Validation Acc: 85.324 % | Historical Best: 98.635 %
+2022-04-13 15:53:14,642 - voting.py[line:240] - INFO: Epoch: 049 | Validation Acc: 83.959 % | Historical Best: 98.635 %

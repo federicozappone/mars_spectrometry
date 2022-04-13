@@ -1,0 +1,9 @@
+2022-04-13 15:47:55,789 - io.py[line:35] - INFO: Saving the model to `./VotingClassifier_Mars_Spectrometry_Model_10_ckpt.pth`
+2022-04-13 15:47:56,684 - voting.py[line:240] - INFO: Epoch: 000 | Validation Acc: 8.191 % | Historical Best: 8.191 %
+2022-04-13 15:48:01,462 - io.py[line:35] - INFO: Saving the model to `./VotingClassifier_Mars_Spectrometry_Model_10_ckpt.pth`
+2022-04-13 15:48:02,347 - voting.py[line:240] - INFO: Epoch: 001 | Validation Acc: 9.898 % | Historical Best: 9.898 %
+2022-04-13 15:48:07,140 - io.py[line:35] - INFO: Saving the model to `./VotingClassifier_Mars_Spectrometry_Model_10_ckpt.pth`
+2022-04-13 15:48:07,986 - voting.py[line:240] - INFO: Epoch: 002 | Validation Acc: 13.652 % | Historical Best: 13.652 %
+2022-04-13 15:48:12,664 - voting.py[line:240] - INFO: Epoch: 003 | Validation Acc: 8.532 % | Historical Best: 13.652 %
+2022-04-13 15:48:17,430 - io.py[line:35] - INFO: Saving the model to `./VotingClassifier_Mars_Spectrometry_Model_10_ckpt.pth`
+2022-04-13 15:48:19,343 - voting.py[line:240] - INFO: Epoch: 004 | Validation Acc: 34.812 % | Historical Best: 34.812 %

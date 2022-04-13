@@ -76,4 +76,4 @@ def generate_submission(model_state_dict_path):
 
 
 if __name__ == "__main__":
-    generate_submission("checkpoints/model_BCEWithLogitsloss_9.418301.ckpt")
+    generate_submission("checkpoints/model_BCEWithLogitsloss.ckpt")

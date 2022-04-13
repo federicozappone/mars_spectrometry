@@ -73,7 +73,7 @@ def generate_submission():
     )
 
     print(final_submission_df.head())
-    final_submission_df.to_csv("submission/submission_mono.csv")
+    final_submission_df.to_csv("submission/submission_compounds.csv")
 
 
 if __name__ == "__main__":
