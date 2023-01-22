@@ -12,7 +12,7 @@ import random
 from torch.optim import lr_scheduler
 from torch.utils.data import DataLoader, ConcatDataset
 
-from model import Mars_Spectrometry_Model, SmoothBCEwLogits
+from model import Soft_Ordering_1D_CNN, LogitsLogLoss
 from dataset import Mars_Spectrometry_Dataset
 from preprocessing import preprocess_sample, abun_per_tempbin
 from tqdm import tqdm
@@ -94,9 +94,6 @@ def train_model(device, model, criterions, optimizer, scheduler, dataloaders, nu
     best_acc = 0.0
 
     dataset_sizes = {x: len(dataloaders[x]) for x in ["train", "val"]}
-    batch_sizes = {x: dataloaders[x].batch_size for x in ["train", "val"]}
-
-    print(batch_sizes)
 
     for epoch in range(num_epochs):
         print("Epoch {}/{}".format(epoch, num_epochs - 1))
@@ -148,7 +145,7 @@ def train_model(device, model, criterions, optimizer, scheduler, dataloaders, nu
                 phase, epoch_loss, epoch_acc))
 
             if phase == "train":
-                scheduler.step(epoch_loss)
+                scheduler.step()
 
             # deep copy the model
             if phase == "val" and epoch_acc > best_acc:
@@ -217,7 +214,7 @@ def train():
 
             # define training and validation data loaders
             data_loader_train = torch.utils.data.DataLoader(
-                dataset, batch_size=16, num_workers=4, sampler=train_subsampler)
+                dataset, batch_size=16, num_workers=1, sampler=train_subsampler)
 
             data_loader_val = torch.utils.data.DataLoader(
                 dataset, batch_size=1, num_workers=1, sampler=val_subsampler)
@@ -227,20 +224,22 @@ def train():
                 "train": data_loader_train,
                 "val": data_loader_val
             }
-
+          
             # Initialize the model
-            model = Mars_Spectrometry_Model(num_features, num_labels)
+            model = Soft_Ordering_1D_CNN(num_features, num_labels)
             model.to(device)
-
+              
             # Define the loss functions and optimizer
             criterions = {
                 "train": SmoothBCEwLogits(smoothing=0.001),
                 "val": nn.BCEWithLogitsLoss()
             }
-
+            
             optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-5)
-            scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, "min", patience=4, factor=0.8, min_lr=1e-8)
+            #scheduler = lr_scheduler.ReduceLROnPlateau(optimizer, "min", patience=4, factor=0.8, min_lr=1e-8)
 
+            scheduler = torch.optim.lr_scheduler.OneCycleLR(optimizer=optimizer, pct_start=0.1, div_factor=1e5, 
+                                                  max_lr=0.0001, epochs=24, steps_per_epoch=len(data_loader_train))
 
             model, best_acc = train_model(device, model, criterions, optimizer, scheduler, dataloaders, num_epochs=24)
 
@@ -252,7 +251,7 @@ def train():
             #torch.save(model.state_dict(), f"checkpoints/model_BCEWithLogitsloss_fold{fold}_seed{seed}.ckpt")
 
             # directly generate the submission for seed/fold combination here and merge them later
-            generate_submission(model, device, f"mlp_acc_{best_acc}", seed, fold)
+            generate_submission(model, device, f"cnn_1d_acc_{best_acc}", seed, fold)
 
         # Print fold results
         print(f"K-Fold Cross Validation results for {kfold_n} folds")

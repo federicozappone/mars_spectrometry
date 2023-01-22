@@ -10,7 +10,7 @@ from torch.nn.modules.loss import _WeightedLoss
 
 
 class SmoothBCEwLogits(_WeightedLoss):
-    def __init__(self, weight=None, reduction='mean', smoothing=0.0):
+    def __init__(self, weight=None, reduction="mean", smoothing=0.0):
         super().__init__(weight=weight, reduction=reduction)
         self.smoothing = smoothing
         self.weight = weight
@@ -28,11 +28,11 @@ class SmoothBCEwLogits(_WeightedLoss):
     def forward(self, inputs, targets):
         targets = SmoothBCEwLogits._smooth(targets, inputs.size(-1),
             self.smoothing)
-        loss = F.binary_cross_entropy_with_logits(inputs, targets,self.weight)
+        loss = F.binary_cross_entropy_with_logits(inputs, targets, self.weight)
 
-        if  self.reduction == 'sum':
+        if  self.reduction == "sum":
             loss = loss.sum()
-        elif  self.reduction == 'mean':
+        elif  self.reduction == "mean":
             loss = loss.mean()
 
         return loss
